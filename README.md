@@ -62,8 +62,102 @@ public class Main {
 
 ![상속을 통한 필드 재활용](images/IMG_inheritance_01.png)
 
-MountainBike 클래스의 객체가 생성되면 부모 클래스인 Bicycle 클래스의 모든 메서드와 필드의 복사본 역시 메모리에 할당된다.
-MountainBike 객체는 이 메모리를 참조하여 부모 클래스의 멤버에도 접근할 수 있다.
+MountainBike 클래스의 객체가 생성되면 부모 클래스인 Bicycle 클래스의 모든 메서드와 필드의 복사본 역시 메모리에 할당된다.  
+
+자식 클래스 객체가 생성될 때 부모 클래스는 별도로 객체가 생성되지 않는다.
+
+```java
+public class Fruit {
+
+    public Fruit() {
+        System.out.println("Super class constructor");
+        System.out.println("Super class object hashcode: " + this.hashCode());
+        System.out.println("This class name: " + this.getClass().getName());
+    }
+}
+
+public class Pineapple extends Fruit {
+
+    public Pineapple() {
+        System.out.println("Sub class constructor");
+        System.out.println("Sub class object hashcode :" + this.hashCode());
+        System.out.println("This class name: " + this.getClass().getName());
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+        Pineapple pineapple = new Pineapple();
+    }
+}
+```
+
+![부모 클래스를 상속받은 자식 클래스](images/IMG_inheritance_02.png)
+
+위 코드를 보면, 생성자 호출이 클래스의 객체가 생성되었음을 의미하는 일반적인 가정과 다르다.  
+따라서, 클래스 생성자가 실행될 때마다 해당 클래스의 객체가 생성되는지 여부를 맹목적으로 말할 순 없다.  
+
+부모 클래스 객체의 해쉬코드와 자식 클래스 객체의 해쉬코드가 동일하다는 것에서 알 수 있듯이 하나의 객체만 생성되었다는 것을 알 수 있다.  
+클래스의 이름도 자식 클래스인 Apple 만을 출력하고 있다.
+
+## 다양한 상속 유형
+
+#### Single Inheritance
+
+```java
+class Paper {}
+class Document extends Paper {}
+```
+
+#### Multilevel Inheritance
+
+```java
+class Paper {}
+class Document extends Paper {}
+class Book extends Document {}
+```
+
+#### Hierarchical Inheritance
+
+```java
+class Paper {}
+class Newspaper extends Paper {}
+class Book extends Paper {}
+class Box extends Paper {}
+```
+
+#### Multiple Inheritance
+
+```java
+interface Paper {}
+interface Text {}
+class Book implements Paper, Text {}
+```
+
+## Important facts about inheritance in Java
+
+#### Default superclass
+
+부모 클래스가 없는 Object 클래스를 제외하고, 모든 클래스는 오직 하나의 부모 클래스가 존재한다.  
+명시적인 부모 클래스가 없는 경우 모든 클래스는 암시적으로 Object 클래스의 자식 클래스이다.  
+
+#### Superclass can only be one
+
+부모 클래스는 여러 자식 클래스를 가질 수 있지만 자식 클래스는 오직 하나의 부모 클래스만 가질 수 있다.  
+자바에서는 클래스를 통한 다중 상속을 지원하지 않기 때문이다.  
+다만, 인터페이스를 통한 다중 상속은 지원한다.
+
+#### Inheriting Constructors
+
+자식 클래스는 부모 클래스의 멤버(모든 필드, 메서드, 중첩 클래스)를 상속받는다.  
+그러나 생성자는 멤버가 아니기 때문에 상속되지 않는다.  
+부모 클래스의 생성자는 자식 클래스에 의해 실행된다.
+
+#### Private member inheritance
+
+자식 클래스는 부모 클래스의 private 멤버를 상속받지 않는다.  
+그러나 부모 클래스에서 private 필드에 접근하기 위한 public 또는 protected 메서드(ex. getter(), setter())가 있는 경우 자식 클래스에서도 사용할 수 있다.  
 
 <hr>
 
