@@ -159,6 +159,46 @@ class Book implements Paper, Text {}
 자식 클래스는 부모 클래스의 private 멤버를 상속받지 않는다.  
 그러나 부모 클래스에서 private 필드에 접근하기 위한 public 또는 protected 메서드(ex. getter(), setter())가 있는 경우 자식 클래스에서도 사용할 수 있다.  
 
+## IS-A relationship
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+        final House house = new House();
+        final Apartment apartment = new Apartment();
+        final Villa villa = new Villa();
+        final Xi xi = new Xi();
+
+        System.out.println("house instanceof House: " + (house instanceof House));
+        System.out.println("apartment instanceof House: " + (apartment instanceof House));
+        System.out.println("villa instanceof House: " + (villa instanceof House));
+        System.out.println("xi instanceof House: " + (xi instanceof House));
+    }
+
+}
+
+
+class House {}
+class Apartment extends House {}
+class Villa extends House {}
+class Xi extends Apartment {}
+```
+
+![IS-A](images/IMG_inheritance_03.png)
+
+#### 자식 클래스에서 할 수 있는 것은 무엇일까?
+
+자식 클래스에서 부모 클래스의 멤버를 그대로 상속하거나 수정하거나 숨기거나 새 멤버로 보완할 수 있다.  
+- 상속된 필드는 다른 필드와 마찬가지로 직접 사용할 수 있다.  
+- 부모 클래스에 없는 새 필드를 선언할 수 있다.
+- 상속된 메서드는 그대로 직접 사용할 수 있다.  
+- 부모 클래스에 정의된 메서드를 재정의하여 사용할 수 있다.
+- 부모 클래스에 정의된 메서드 시그니처와 동일한 메서드를 자식 클래스에서 새로운 static 메서드로 만들어서 숨길 수 있다.  
+이건 확인이 직접 필요하다. 정확히 무슨 의미인지 이해하지 못한 내용이다.
+- 부모 클래스에 없는 새 메서드를 선언할 수 있다.
+- 묵시적 또는 명시적으로 super 키워드를 사용하여 부모 클래스의 생성자를 호출하는 자식 클래스 생성자를 작성할 수 있다.
+
 <hr>
 
 #### References
