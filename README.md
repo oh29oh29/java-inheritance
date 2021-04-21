@@ -294,6 +294,83 @@ OOP 의 핵심 원칙은 [LSP](https://github.com/oh29oh29/read-and-learn/blob/m
 결과적으로 컴파일러는 어떤 메서드를 호출해야하는지 알기 위해 객체 타입을 확인해야 한다.  
 이 확인은 런타임 시 가능하므로 메서드 재정의는 동적 바인딩의 전형적인 예가 된다.
 
+## Dynamic Method Dispatch
+
+메서드 재정의는 Java 가 런타임 다형성을 지원하는 방법 중 하나이다. 
+Dynamic method dispatch 는 컴파일 타임이 아니라 런타임에 재정의된 메서드에 대한 호출을 확인하는 메커니즘이다.
+
+재정의된 메서드가 부모 클래스 참조를 통해 호출되면 Java 는 호출이 발생할 때 참조되는 객체의 타입에 따라 메서드의 어떤 버전이 실행될 것인지 결정한다.
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        House house = new House();
+        Apartment apartment = new Apartment();
+        Villa villa = new Villa();
+
+        House reference;
+
+        reference = house;
+        reference.print();
+
+        reference = apartment;
+        reference.print();
+
+        reference = villa;
+        reference.print();
+    }
+}
+
+class House {
+    void print() {
+        System.out.println("Hello House");
+    }
+}
+
+class Apartment extends House {
+    @Override
+    void print() {
+        System.out.println("Hello Apartment");
+    }
+}
+
+class Villa extends House {
+    @Override
+    void print() {
+        System.out.println("Hello Villa");
+    }
+}
+```
+
+![dynamic method dispatch](images/IMG_inheritance_06.png)
+
+Main 클래스의 main() 메서드 안에서 처음에는 House, Apartment, Villa 타입의 객체가 선언된다.
+
+```java
+House house = new House();
+Apartment apartment = new Apartment();
+Villa villa = new Villa();
+```
+
+![dynamic method dispatch](images/IMG_inheritance_07.png)
+
+이제 각 객체 타입에 대한 참조를 reference 에 하나씩 할당하고 해당 참조를 사용하여 print() 를 호출한다.  
+출력에서 알 수 있듯이 실행된 print() 의 버전은 호출 시 참조되는 객체 타입에 따라 결정된다.  
+
+```java
+reference = house;
+reference.print();  // calling House's version of print()
+```
+
+![dynamic method dispatch](images/IMG_inheritance_08.png)
+
+```java
+reference = apartment;
+reference.print();  // calling Apartment's version of print()
+```
+
+![dynamic method dispatch](images/IMG_inheritance_09.png)
+
 <hr>
 
 #### References
@@ -302,6 +379,7 @@ OOP 의 핵심 원칙은 [LSP](https://github.com/oh29oh29/read-and-learn/blob/m
 > - [geeksforgeeks | Inheritance in Java](https://www.geeksforgeeks.org/inheritance-in-java/)
 > - [geeksforgeeks | Java Object Creation of Inherited Class](https://www.geeksforgeeks.org/gfact-52-java-object-creation-of-inherited-classes/)
 > - [geeksforgeeks | Dynamic Method Dispatch or Runtime Polymorphism in Java](https://www.geeksforgeeks.org/dynamic-method-dispatch-runtime-polymorphism-java/)
+> - [geeksforgeeks | Overriding in Java](https://www.geeksforgeeks.org/overriding-in-java/)
 > - [baeldung | Guide to Inheritance in Java](https://www.baeldung.com/java-inheritance)
 > - [baeldung | Guide to the super Java Keyword](https://www.baeldung.com/java-super)
 > - [baeldung | Method Overloading and Overriding in Java](https://www.baeldung.com/java-method-overload-override)
