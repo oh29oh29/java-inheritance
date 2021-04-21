@@ -1,5 +1,8 @@
 package study03;
 
+/**
+ * 해당 클래스는 IS-A relationship 에 대해서 확인하기 위해 작성되었다.
+ * */
 public class Main {
 
     public static void main(String[] args) {

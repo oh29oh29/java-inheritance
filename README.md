@@ -199,6 +199,101 @@ class Xi extends Apartment {}
 - 부모 클래스에 없는 새 메서드를 선언할 수 있다.
 - 묵시적 또는 명시적으로 super 키워드를 사용하여 부모 클래스의 생성자를 호출하는 자식 클래스 생성자를 작성할 수 있다.
 
+## super 키워드
+
+super 키워드를 통해 부모 클래스에 접근할 수 있다.  
+
+#### The super Keyword With Constructors
+
+super() 를 사용하면 부모 클래스의 기본 생성자를 호출할 수 있다.  
+생성자 블럭 안에서 반드시 처음 호출되어야 한다.  
+
+#### Accessing Parent Class Variables
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        new ChildStudy().printParentMessage();
+    }
+}
+
+class ParentStudy {
+    String message = "Super class";
+}
+
+class ChildStudy extends ParentStudy {
+    String message = "Child class";
+
+    public void printParentMessage() {
+        System.out.println(super.message);
+    }
+}
+```
+
+![Accessing Parent Class Variables](images/IMG_inheritance_04.png)
+
+자식 클래스에서 super 키워드를 통해 부모 클래스의 변수에 접근할 수 있다.
+
+#### The super Keyword With Method Overriding
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        new ChildStudy().printMessage();
+    }
+}
+
+class ParentStudy {
+    String message = "Super class";
+
+    public void printMessage() {
+        System.out.println(message);
+    }
+}
+
+class ChildStudy extends ParentStudy {
+    String message = "Child class";
+
+    public ChildStudy() {
+        super.printMessage();
+    }
+
+    @Override
+    public void printMessage() {
+        System.out.println(message);
+    }
+}
+```
+
+![The super Keyword With Method Overriding](images/IMG_inheritance_05.png)
+
+super 키워드를 사용하여 자식 클래스에서 재정의된 메서드라도 접근할 수 있다.
+
+## Method Overriding
+
+부모 클래스에 정의된 메서드에 대하여 재정의를 통해 자식 클래스에서 세분화된 구현을 제공할 수 있다.  
+
+#### Type Substitutability
+
+OOP 의 핵심 원칙은 [LSP](https://github.com/oh29oh29/read-and-learn/blob/master/books/clean-architecture/Chapter09.md) 와 밀접한 관련이 있는 타입 치환 가능성이다.  
+즉, LSP 는 어플리케이션이 주어진 기본 타입으로 작동하는 경우 하위 타입이어도 작동해야한다는 것을 의미한다.  
+
+메서드 재정의의 가장 큰 문제는 하위 클래스의 일부 특정 메서드 구현이 LSP 를 완전히 준수하지 않아 타입 치환 가능성을 유지하지 못할 수 있다는 것이다.  
+물론, 다른 타입의 인수를 받아들이고 다른 타입도 반환하도록 재정의된 메서드를 만드는 것이 유효하지만 다음 규칙을 완전히 준수해야한다.  
+
+- 부모 클래스의 메서드에 특정 타입의 인수가 있다면, 재정의하는 메서드는 동일하거나 부모 타입의 인수로 재정의되어야 한다.
+- 부모 클래스의 메서드가 void 를 리턴한다면, 재정의하는 메서드도 void 리턴 해야한다.
+- 부모 클래스의 메서드가 primitive 타입을 리턴한다면, 재정의하는 메서드도 primitive 타입을 리턴 해야한다.
+- 부모 클래스의 메서드가 특정 타입을 리턴한다면, 재정의하는 메서드도 동일하거나 하위 타입으로 리턴 해야한다.
+- 부모 클래스의 메서드가 exception 을 발생시킨다면, 재정의하는 메서드도 동일한 exception 또는 하위 exception 을 발생시켜야 한다.
+
+#### Dynamic Binding
+
+메서드 재정의는 부모 타입과 하위 타입의 계층이 있는 상속으로만 구현될 수 있고 부모 클래스와 하위 클래스 모두 동일한 메서드를 정의하기 때문에 컴파일러는 호출할 메서드를 컴파일 시점에 결정할 수 없다.  
+
+결과적으로 컴파일러는 어떤 메서드를 호출해야하는지 알기 위해 객체 타입을 확인해야 한다.  
+이 확인은 런타임 시 가능하므로 메서드 재정의는 동적 바인딩의 전형적인 예가 된다.
+
 <hr>
 
 #### References
@@ -206,3 +301,8 @@ class Xi extends Apartment {}
 > 웹 문서
 > - [geeksforgeeks | Inheritance in Java](https://www.geeksforgeeks.org/inheritance-in-java/)
 > - [geeksforgeeks | Java Object Creation of Inherited Class](https://www.geeksforgeeks.org/gfact-52-java-object-creation-of-inherited-classes/)
+> - [geeksforgeeks | Dynamic Method Dispatch or Runtime Polymorphism in Java](https://www.geeksforgeeks.org/dynamic-method-dispatch-runtime-polymorphism-java/)
+> - [baeldung | Guide to Inheritance in Java](https://www.baeldung.com/java-inheritance)
+> - [baeldung | Guide to the super Java Keyword](https://www.baeldung.com/java-super)
+> - [baeldung | Method Overloading and Overriding in Java](https://www.baeldung.com/java-method-overload-override)
+> - [baeldung | Double Dispatch in DDD](https://www.baeldung.com/ddd-double-dispatch)
