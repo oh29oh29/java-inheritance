@@ -371,6 +371,169 @@ reference.print();  // calling Apartment's version of print()
 
 ![dynamic method dispatch](images/IMG_inheritance_09.png)
 
+Java 에서 재정의는 오직 메서드만 가능하다.  
+따라서 변수와 같은 멤버에 대해서는 다형성이 적용되지 않는다.  
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        House house = new Apartment();
+        System.out.println(house.size);
+        house.printSize();
+    }
+}
+
+class House {
+    int size = 10;
+
+    void printSize() {
+        System.out.println("House's size is:  " + size);
+    }
+}
+
+class Apartment extends House {
+    int size = 20;
+
+    @Override
+    void printSize() {
+        System.out.println("Apartment's size is: " + size);
+    }
+}
+```
+
+![dynamic method dispatch](images/IMG_inheritance_10.png)
+
+변수는 재정의가 되지 않기 때문에 `house.size` 는 항상 부모 클래스의 변수를 참조한다.
+
+#### Advantages of Dynamic Method Dispatch
+
+Dynamic method dispatch 는 Java 가 런타임 다형성에 중요한 메서드의 재정의를 지원할 수 있도록 한다.  
+Dynamic method dispatch 를 통해 클래스는 모든 하위 클래스에서 공통으로 쓰이는 메서드를 정의할 수 있으며, 하위 클래스는 이런 메서드의 일부 또는 전체를 재정의할 수 있다.  
+
+#### Static vs Dynamic binding
+
+Static 바인딩은 컴파일 타임에 수행되고 Dynamic 바인딩은 런타임 동안 수행된다.  
+private, final, static 메서드 및 변수는 Static 바인딩을 하는 반면에, 재정의된 메서드는 런타임 객체 타입에 따라 바인딩 한다.
+
+## Double Dispatch
+
+Dynamic method dispatch 가 두번 일어나는 것을 Double dispatch 라고 한다.  
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        final List<Human> humans = List.of(new Man(), new Woman());
+        final List<House> houses = List.of(new Apartment(), new Villa());
+        humans.forEach(human -> houses.forEach(human::print));
+    }
+}
+
+interface House {
+    void printWhoLivesIn(Man man);
+    void printWhoLivesIn(Woman woman);
+}
+class Apartment implements House {
+    @Override
+    public void printWhoLivesIn(Man man) {
+        System.out.println("A man lives in this Apartment.");
+    }
+
+    @Override
+    public void printWhoLivesIn(Woman woman) {
+        System.out.println("A woman lives in this Apartment.");
+    }
+}
+class Villa implements House {
+    @Override
+    public void printWhoLivesIn(Man man) {
+        System.out.println("A man lives in this Villa.");
+    }
+
+    @Override
+    public void printWhoLivesIn(Woman woman) {
+        System.out.println("A woman lives in this Villa.");
+    }
+}
+
+interface Human {
+    void print(House house);
+}
+class Man implements Human {
+    @Override
+    public void print(House house) {
+        house.printWhoLivesIn(this);
+    }
+}
+class Woman implements Human {
+    @Override
+    public void print(House house) {
+        house.printWhoLivesIn(this);
+    }
+}
+```
+
+![double dispatch](images/IMG_inheritance_11.png)
+
+#### Visitor Pattern
+
+방문자 패턴은 더블 디스패치를 이용한 대표적인 패턴이라고 한다.  
+이 내용은 추후 디자인 패턴을 공부하면서 알아보도록 하겠다.  
+
+## Abstraction
+
+데이터 추상화는 필수 세부 데이터만 사용자에게 표시되는 속성이다.  
+객체의 속성 및 동작은 유사한 타입의 다른 객체와 구별되며 객체를 분류 및 그룹화하는데 도움이 된다.  
+Java 에서 추상화는 인터페이스와 추상 클래스에 의해 이루어진다.  
+
+#### Abstract classes and Abstract methods
+
+1. 추상 클래스는 abstract 키워드로 선언된 클래스이다.
+2. 추상 메서드는 구현없이 선언된 메서드이다.  
+3. 추상 클래스의 메서드는 모두 추상 메서드일 수도 있고 아닐수도 있다. 일부 메서드는 구현되어 있을 수 있다.  
+4. 추상 메서드는 항상 하위 클래스에서 재정의 되어야 하거나 하위 클래스 자체를 추상화해야 한다.
+5. 추상 메서드가 하나 이상일 경우 그 클래스는 abstract 로 선언해야 한다.
+6. 추상 클래스는 new 키워드로 직접 인스턴스화 할 수 없다.
+7. 추상 클래스는 argument 가 존재하는 생성자를 가질 수 있으며 기본 생성자는 항상 추상 클래스에 존재한다.  
+
+## final 키워드
+
+final 키워드는 변수, 메서드 또는 클래스에만 적용 할 수 있는 키워드이다.
+
+#### final variable
+
+변수 앞에 final 이 붙으면, 그 변수는 immutable 임을 의미한다.  
+즉, 상수라고 할 수 있다.
+
+#### final classes
+
+클래스에 final 이 붙으면, 그 클래스는 다른 클래스에게 상속할 수 없음을 의미한다.
+
+#### final methods
+
+메서드에 final 이 붙으면, 그 메서드는 다른 클래스에서 재정의할 수 없음을 의미한다.  
+
+## Object class
+
+Object 클래스는 java.lang 패키지에 존재한다.  
+Java 의 모든 클래스는 Object 클래스에서 직접 또는 간접적으로 상속받고 있다.  
+따라서 모든 Java 클래스에서 Object 클래스 메소드를 사용할 수 있다.  
+
+#### Using Object class methods
+
+##### 1. toString()
+
+toString() 메서드는 객체의 문자열 표현을 제공하며 객체를 문자열로 변환하는 데 사용된다.  
+Object 클래스의 기본 toString() 메서드는 인스턴스의 해당 클래스의 이름, at-sign 문자(@) 및 객체의 해시 코드에 대한 부호없는 16 진수 표현으로 구성된 문자열을 반환한다.  
+
+##### 2. hashCode()
+
+모든 객체에 대해 JVM 은 해시 코드 인 고유 번호를 생성하고 고유한 객체에 대해 고유한 정수를 반환한다.  
+hashCode() 메서드에 대한 공부는 더 필요하며, 추후 추가할 예정이다.
+
+##### 3. equals(Object obj)
+
+매개변수로 받은 객체를 this 객체와 비교한다.
+
 <hr>
 
 #### References
@@ -380,6 +543,9 @@ reference.print();  // calling Apartment's version of print()
 > - [geeksforgeeks | Java Object Creation of Inherited Class](https://www.geeksforgeeks.org/gfact-52-java-object-creation-of-inherited-classes/)
 > - [geeksforgeeks | Dynamic Method Dispatch or Runtime Polymorphism in Java](https://www.geeksforgeeks.org/dynamic-method-dispatch-runtime-polymorphism-java/)
 > - [geeksforgeeks | Overriding in Java](https://www.geeksforgeeks.org/overriding-in-java/)
+> - [geeksforgeeks | Abstraction in Java](https://www.geeksforgeeks.org/abstraction-in-java-2/)
+> - [geeksforgeeks | final keyword in java](https://www.geeksforgeeks.org/final-keyword-java/)
+> - [geeksforgeeks | Object class in Java](https://www.geeksforgeeks.org/object-class-in-java/)
 > - [baeldung | Guide to Inheritance in Java](https://www.baeldung.com/java-inheritance)
 > - [baeldung | Guide to the super Java Keyword](https://www.baeldung.com/java-super)
 > - [baeldung | Method Overloading and Overriding in Java](https://www.baeldung.com/java-method-overload-override)
